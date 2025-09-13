@@ -6,27 +6,33 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import emailjs from '@emailjs/browser';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    projectType: '',
-    message: ''
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const formSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Please enter a valid email address'),
+    projectType: z.string().min(1, 'Project type is required'),
+    message: z.string().min(1, 'Message is required')
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  type FormData = z.infer<typeof formSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema)
+  });
+
+  const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
 
     try {
@@ -35,10 +41,10 @@ const ContactSection = () => {
         'service_wzyohwk', // Replace with your EmailJS service ID
         'template_t6436sj', // Replace with your EmailJS template ID
         {
-          from_name: formData.name,
-          from_email: formData.email,
-          project_type: formData.projectType,
-          message: formData.message,
+          from_name: data.name,
+          from_email: data.email,
+          project_type: data.projectType,
+          message: data.message,
         },
         'JuMybqUtAf3laZ7QV' // Replace with your EmailJS public key
       );
@@ -49,12 +55,7 @@ const ContactSection = () => {
       });
 
       // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        projectType: '',
-        message: ''
-      });
+      reset();
     } catch (error) {
       toast({
         title: "Error sending message",
@@ -85,39 +86,51 @@ const ContactSection = () => {
               <CardTitle className="text-2xl">Send us a message</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input 
-                    placeholder="Your Name" 
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <Input 
-                    placeholder="Your Email" 
-                    type="email" 
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <div>
+                    <Input 
+                      placeholder="Your Name" 
+                      {...register('name')}
+                      required
+                    />
+                    {errors.name && (
+                      <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Input 
+                      placeholder="Your Email" 
+                      type="email" 
+                      {...register('email')}
+                      required
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+                    )}
+                  </div>
                 </div>
-                <Input 
-                  placeholder="Project Type (MVP, Full Solution, AI, etc.)" 
-                  name="projectType"
-                  value={formData.projectType}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Textarea 
-                  placeholder="Tell us about your project..." 
-                  className="min-h-[120px]"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  required
-                />
+                <div>
+                  <Input 
+                    placeholder="Project Type (MVP, Full Solution, AI, etc.)" 
+                    {...register('projectType')}
+                    required
+                  />
+                  {errors.projectType && (
+                    <p className="text-sm text-red-500 mt-1">{errors.projectType.message}</p>
+                  )}
+                </div>
+                <div>
+                  <Textarea 
+                    placeholder="Tell us about your project..." 
+                    className="min-h-[120px]"
+                    {...register('message')}
+                    required
+                  />
+                  {errors.message && (
+                    <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>
+                  )}
+                </div>
                 <Button 
                   type="submit" 
                   variant="hero" 
@@ -154,12 +167,6 @@ const ContactSection = () => {
                   title: "Phone",
                   content: "+91 7252995449 | +91 80856 85200",
                   href: "tel:+917252995449"
-                },
-                {
-                  icon: MapPin,
-                  title: "Location",
-                  content: "India",
-                  // href: "#"
                 }
               ].map((contact, index) => (
                 <Card key={index} className="hover-scale cursor-pointer">

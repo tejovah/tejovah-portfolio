@@ -12,7 +12,6 @@ const Header = () => {
               <img src={tejovahLogo} alt="Tejovah Logo" className="h-10 w-10 mt-1" />
               <div>
                 <h1 className="text-2xl font-bold gradient-text">Tejovah</h1>
-                <p className="text-xs text-muted-foreground">Software Agency</p>
               </div>
             </div>
           </a>

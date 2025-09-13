@@ -21,7 +21,7 @@ const AboutSection = () => {
             
             <div className="space-y-4">
               {[
-                "Expert team with 5+ years average experience",
+                // "Expert team with 5+ years average experience",
                 "Agile development with weekly sprint reviews", 
                 "Modern tech stack and best practices",
                 "Post-launch support and maintenance"
@@ -49,10 +49,10 @@ const AboutSection = () => {
           {/* Stats Cards */}
           <div className="grid grid-cols-2 gap-6 animate-scale-in delay-200">
             {[
-              { icon: Users, label: "Happy Clients", value: "50+" },
+              { icon: Users, label: "Happy Clients", value: "2+" },
               { icon: Award, label: "Success Rate", value: "100%" },
               { icon: Clock, label: "Avg. Delivery", value: "6 weeks" },
-              { icon: CheckCircle, label: "Projects", value: "100+" }
+              { icon: CheckCircle, label: "Projects", value: "2+" }
             ].map((stat, index) => (
               <Card key={index} className="gradient-border text-center hover-scale">
                 <CardContent className="p-6">

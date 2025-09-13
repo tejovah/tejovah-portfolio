@@ -70,12 +70,12 @@ const Footer = () => {
             © {new Date().getFullYear()} Tejovah. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="/privacy-policy" className="text-muted-foreground hover:text-primary text-sm transition-colors">
+            {/* <a href="/privacy-policy" className="text-muted-foreground hover:text-primary text-sm transition-colors">
               Privacy Policy
             </a>
             <a href="/terms-of-service" className="text-muted-foreground hover:text-primary text-sm transition-colors">
               Terms of Service
-            </a>
+            </a> */}
             {/* <a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">
               Cookie Policy
             </a> */}

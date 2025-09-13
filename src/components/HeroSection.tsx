@@ -60,7 +60,7 @@ const HeroSection = () => {
           {/* Stats */}
           <div className="animate-fade-in-up delay-400 mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-3xl font-bold gradient-text">50+</div>
+              <div className="text-3xl font-bold gradient-text">2+</div>
               <div className="text-muted-foreground">Projects Delivered</div>
             </div>
             <div className="text-center">
